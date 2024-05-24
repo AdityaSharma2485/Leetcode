@@ -1,0 +1,28 @@
+from typing import List
+
+class Solution:
+    def beautifulSubsets(self, nums: List[int], k: int) -> int:
+        def backtrack(index, current_set):
+            if index == len(nums):
+                if current_set:  # non-empty subsets
+                    self.count += 1
+                return
+            
+            # Skip the current number
+            backtrack(index + 1, current_set)
+            
+            # Try to include the current number if it keeps the subset beautiful
+            valid_to_add = True
+            for num in current_set:
+                if abs(num - nums[index]) == k:
+                    valid_to_add = False
+                    break
+            
+            if valid_to_add:
+                current_set.append(nums[index])
+                backtrack(index + 1, current_set)
+                current_set.pop()
+
+        self.count = 0
+        backtrack(0, [])
+        return self.count
